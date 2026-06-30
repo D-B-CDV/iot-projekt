@@ -19,8 +19,8 @@ jobs:
         username: clickapp
         password: ${{ secrets.ACR_PASSWORD }}
 
-    - name: Build image (versioned)
-      run: docker build -t clickapp.azurecr.io/aplikacja-do-klikania:${{ github.run_number }} .
+    - name: Build image
+    run: docker build -t clickapp.azurecr.io/aplikacja-do-klikania:latest .
 
-    - name: Push image (versioned)
-      run: docker push clickapp.azurecr.io/aplikacja-do-klikania:${{ github.run_number }}
+    - name: Push image
+    run: docker push clickapp.azurecr.io/aplikacja-do-klikania:latest
