@@ -1,4 +1,4 @@
-name: CI/CD Docker to ACR
+name: CI/CD Full Deploy
 
 on:
   push:
@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout
       uses: actions/checkout@v4
 
     - name: Login to ACR
@@ -18,5 +18,12 @@ jobs:
     - name: Build image
       run: docker build -t clickapp.azurecr.io/aplikacja-do-klikania:latest .
 
-    - name: Push image
+    - name: Push image to ACR
       run: docker push clickapp.azurecr.io/aplikacja-do-klikania:latest
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: [NAZWA_APP_SERVICE]
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        images: clickapp.azurecr.io/aplikacja-do-klikania:latest
