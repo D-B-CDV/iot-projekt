@@ -1,4 +1,4 @@
-name: Build and Push to ACR
+name: CI/CD Docker to ACR + Auto Deploy
 
 on:
   push:
@@ -9,18 +9,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Log in to ACR
+    - name: Login to ACR
       uses: azure/docker-login@v1
       with:
         login-server: clickapp.azurecr.io
         username: clickapp
         password: ${{ secrets.ACR_PASSWORD }}
 
-    - name: Build image
-      run: docker build -t clickapp.azurecr.io/aplikacja-do-klikania:latest .
+    - name: Build image (versioned)
+      run: docker build -t clickapp.azurecr.io/aplikacja-do-klikania:${{ github.run_number }} .
 
-    - name: Push image
-      run: docker push clickapp.azurecr.io/aplikacja-do-klikania:latest
+    - name: Push image (versioned)
+      run: docker push clickapp.azurecr.io/aplikacja-do-klikania:${{ github.run_number }}
