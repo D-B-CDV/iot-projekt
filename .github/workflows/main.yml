@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: CI/CD Docker to ACR
 
 on:
   push:
@@ -9,8 +9,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    - name: Checkout code
       uses: actions/checkout@v4
+
+    - name: Login to ACR
+      run: echo ${{ secrets.ACR_PASSWORD }} | docker login clickapp.azurecr.io -u ${{ secrets.ACR_USERNAME }} --password-stdin
 
     - name: Build image
       run: docker build -t clickapp.azurecr.io/aplikacja-do-klikania:latest .
