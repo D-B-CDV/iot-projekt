@@ -1,4 +1,4 @@
-name: CI/CD Docker to ACR + Auto Deploy
+name: Build and Push Docker Image
 
 on:
   push:
@@ -12,15 +12,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Login to ACR
-      uses: azure/docker-login@v1
-      with:
-        login-server: clickapp.azurecr.io
-        username: clickapp
-        password: ${{ secrets.ACR_PASSWORD }}
-
     - name: Build image
-    run: docker build -t clickapp.azurecr.io/aplikacja-do-klikania:latest .
+      run: docker build -t clickapp.azurecr.io/aplikacja-do-klikania:latest .
 
     - name: Push image
-    run: docker push clickapp.azurecr.io/aplikacja-do-klikania:latest
+      run: docker push clickapp.azurecr.io/aplikacja-do-klikania:latest
