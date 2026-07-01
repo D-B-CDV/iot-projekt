@@ -1,0 +1,26 @@
+name: CI/CD do Azure App Service (Docker)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout GitHub repo
+      uses: actions/checkout@v4
+
+    - name: Login to Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_APP_SERVICE_PUBLISH_PROFILE }}
+
+    - name: Build and deploy Container to Azure App Service
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: clickapp
+        publish-profile: ${{ secrets.AZURE_APP_SERVICE_PUBLISH_PROFILE }}
+        images: 'index.docker.io/${{ github.repository }}:${{ github.sha }}'
